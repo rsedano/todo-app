@@ -1,0 +1,34 @@
+{
+  "nav": {
+    "title": "Application de Tâches"
+  },
+  "page": {
+    "heading": "Mes Tâches",
+    "addButton": "Ajouter une tâche",
+    "noTodos": "Aucune tâche pour l'instant. Ajoutez-en une ci-dessus !"
+  },
+  "form": {
+    "titlePlaceholder": "Qu'est-ce qui doit être fait ?",
+    "descriptionPlaceholder": "Description (facultatif)",
+    "addButton": "Ajouter une tâche",
+    "saveButton": "Enregistrer les modifications",
+    "cancelButton": "Annuler"
+  },
+  "todo": {
+    "markComplete": "Marquer comme terminée",
+    "markIncomplete": "Marquer comme incomplète",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "overdue": "En retard"
+  },
+  "stats": {
+    "active": "Actives",
+    "done": "Terminées",
+    "urgent": "Urgentes"
+  },
+  "lang": {
+    "en": "English",
+    "es": "Español",
+    "fr": "Français"
+  }
+}

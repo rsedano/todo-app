@@ -1,0 +1,34 @@
+{
+  "nav": {
+    "title": "Aplicación de Tareas"
+  },
+  "page": {
+    "heading": "Mis Tareas",
+    "addButton": "Agregar Tarea",
+    "noTodos": "Sin tareas aún. ¡Agrega una arriba!"
+  },
+  "form": {
+    "titlePlaceholder": "¿Qué hay que hacer?",
+    "descriptionPlaceholder": "Descripción (opcional)",
+    "addButton": "Agregar Tarea",
+    "saveButton": "Guardar Cambios",
+    "cancelButton": "Cancelar"
+  },
+  "todo": {
+    "markComplete": "Marcar como completada",
+    "markIncomplete": "Marcar como incompleta",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "overdue": "Vencida"
+  },
+  "stats": {
+    "active": "Activas",
+    "done": "Completadas",
+    "urgent": "Urgentes"
+  },
+  "lang": {
+    "en": "English",
+    "es": "Español",
+    "fr": "Français"
+  }
+}
