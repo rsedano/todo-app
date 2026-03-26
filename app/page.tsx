@@ -1,65 +1,135 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { Todo } from "./types";
+import { DEMO_TODOS } from "./data";
+import TodoForm from "./components/TodoForm";
+import TodoItem from "./components/TodoItem";
+import StatsBar from "./components/StatsBar";
+import CalendarView from "./components/CalendarView";
+
+type View = "list" | "calendar";
 
 export default function Home() {
+  const [todos, setTodos] = useState<Todo[]>(DEMO_TODOS);
+  const [view, setView] = useState<View>("list");
+  const [showForm, setShowForm] = useState(false);
+  const [editing, setEditing] = useState<Todo | null>(null);
+
+  function addTodo(data: Omit<Todo, "id" | "createdAt">) {
+    const todo: Todo = {
+      ...data,
+      id: crypto.randomUUID(),
+      createdAt: new Date(),
+    };
+    setTodos((prev) => [todo, ...prev]);
+    setShowForm(false);
+  }
+
+  function updateTodo(data: Omit<Todo, "id" | "createdAt">) {
+    if (!editing) return;
+    setTodos((prev) =>
+      prev.map((t) => (t.id === editing.id ? { ...t, ...data } : t))
+    );
+    setEditing(null);
+  }
+
+  function toggleTodo(id: string) {
+    setTodos((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t))
+    );
+  }
+
+  function deleteTodo(id: string) {
+    setTodos((prev) => prev.filter((t) => t.id !== id));
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-full bg-gray-50 font-sans">
+      <div className="mx-auto max-w-3xl px-4 py-8">
+        {/* Header */}
+        <div className="mb-6 flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-gray-900">My Tasks</h1>
+          <div className="flex items-center gap-2">
+            <div className="flex rounded-lg border border-gray-200 bg-white overflow-hidden">
+              <button
+                onClick={() => setView("list")}
+                className={`px-3 py-1.5 text-sm font-medium transition-colors ${
+                  view === "list" ? "bg-blue-600 text-white" : "text-gray-600 hover:bg-gray-50"
+                }`}
+              >
+                List
+              </button>
+              <button
+                onClick={() => setView("calendar")}
+                className={`px-3 py-1.5 text-sm font-medium transition-colors ${
+                  view === "calendar" ? "bg-blue-600 text-white" : "text-gray-600 hover:bg-gray-50"
+                }`}
+              >
+                Calendar
+              </button>
+            </div>
+            {!showForm && !editing && (
+              <button
+                onClick={() => setShowForm(true)}
+                className="rounded-lg bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-700"
+              >
+                + Add Task
+              </button>
+            )}
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+
+        {/* Stats */}
+        <div className="mb-6">
+          <StatsBar todos={todos} />
+        </div>
+
+        {/* Add/Edit form */}
+        {(showForm || editing) && (
+          <div className="mb-6">
+            <TodoForm
+              onSubmit={editing ? updateTodo : addTodo}
+              onCancel={() => {
+                setShowForm(false);
+                setEditing(null);
+              }}
+              initial={editing ?? undefined}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+          </div>
+        )}
+
+        {/* Views */}
+        {view === "list" ? (
+          <div className="flex flex-col gap-3">
+            {todos.length === 0 ? (
+              <p className="py-12 text-center text-gray-400">No tasks yet. Add one above!</p>
+            ) : (
+              todos.map((todo) => (
+                <TodoItem
+                  key={todo.id}
+                  todo={todo}
+                  onToggle={toggleTodo}
+                  onDelete={deleteTodo}
+                  onEdit={(t) => {
+                    setEditing(t);
+                    setShowForm(false);
+                  }}
+                />
+              ))
+            )}
+          </div>
+        ) : (
+          <CalendarView
+            todos={todos}
+            onEdit={(t) => {
+              setEditing(t);
+              setShowForm(false);
+            }}
+            onToggle={toggleTodo}
+          />
+        )}
+      </div>
     </div>
   );
 }
