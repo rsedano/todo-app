@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Todo App
+
+A clean, responsive todo application built with **Next.js 15** and **Tailwind CSS**. No backend or database required — all data lives in React state, with demo todos pre-loaded on start.
+
+## Features
+
+- **Add, edit, and delete todos** — full CRUD via in-memory state
+- **Complete/uncomplete todos** — click the circle checkbox on any item
+- **Priority levels** — high, medium, low (colour-coded)
+- **Categories** — work, personal, shopping, health
+- **Due dates** — overdue items are highlighted in red
+- **Search** — filter todos by title or description
+- **Status filter** — view all, active, or completed todos
+- **Priority & category filters** — narrow down the list
+- **Progress bar** — shows overall completion percentage
+- **Stats panel** — active, done, and urgent counts at a glance
+- **Clear completed** — bulk-remove finished todos
+- **Dark mode** — follows the system colour scheme
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | [Next.js 15](https://nextjs.org) (App Router) |
+| Styling | [Tailwind CSS v4](https://tailwindcss.com) |
+| Language | TypeScript |
+| State | React `useState` / `useMemo` (no external store) |
+| Testing | [Vitest](https://vitest.dev) + [Testing Library](https://testing-library.com) |
+
+## Project Structure
+
+```
+app/
+├── __tests__/
+│   ├── data.test.ts         # Demo data shape and integrity
+│   ├── StatsBar.test.tsx    # Progress and count calculations
+│   ├── TodoForm.test.tsx    # Add / edit form behaviour
+│   └── TodoItem.test.tsx    # Rendering, callbacks, overdue logic
+├── components/
+│   ├── TodoApp.tsx          # Root client component — holds all state
+│   ├── TodoItem.tsx         # Single todo row with actions
+│   ├── TodoForm.tsx         # Add / edit form (shared)
+│   ├── FilterBar.tsx        # Search, status, priority, category filters
+│   └── StatsBar.tsx         # Progress bar and summary counts
+├── data.ts                  # Pre-loaded demo todos
+├── types.ts                 # Todo, Priority, Category types
+├── layout.tsx               # Root layout + metadata
+├── page.tsx                 # Entry point — renders <TodoApp />
+└── globals.css              # Tailwind base import
+```
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install dependencies
+npm install
+
+# Start the dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Build for production
+npm run build
+npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Testing
 
-## Learn More
+```bash
+# Run all tests once
+npm test
 
-To learn more about Next.js, take a look at the following resources:
+# Watch mode
+npm run test:watch
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# With coverage report
+npm run test:coverage
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Tests use **Vitest** with **Testing Library** and **jsdom**. The coverage report is written to `coverage/` (gitignored).
 
-## Deploy on Vercel
+## CI
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Workflow | Trigger | Steps |
+|---|---|---|
+| **PR Checks** | Pull request → `main` | Install → Build → Test + Coverage → Upload coverage artifact |
+| **Main Build** | Push to `main` | Install → Build |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Workflow files live in `.github/workflows/`.
+
+## Demo Data
+
+Eight sample todos are loaded from `app/data.ts` on first render. They cover a mix of priorities, categories, and completion states so every feature is visible immediately. Because there is no persistence layer, refreshing the page resets to this demo set.
+
+## Deploy
+
+The easiest way to deploy is [Vercel](https://vercel.com/new):
+
+1. Push this repository to GitHub
+2. Import the repo in Vercel
+3. Click **Deploy** — no environment variables required
