@@ -4,6 +4,10 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   build-and-test:
     name: Build & Test
@@ -27,6 +31,9 @@ jobs:
 
       - name: Run tests with coverage
         run: npm run test:coverage
+
+      - name: Post coverage report on PR
+        uses: davelosert/vitest-coverage-report-action@v2
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
