@@ -2,11 +2,12 @@ const dictionaries = {
   en: () => import("../dictionaries/en.json").then((m) => m.default),
   es: () => import("../dictionaries/es.json").then((m) => m.default),
   fr: () => import("../dictionaries/fr.json").then((m) => m.default),
+  no: () => import("../dictionaries/no.json").then((m) => m.default),
 };
 
 export type Locale = keyof typeof dictionaries;
 
-export const locales: Locale[] = ["en", "es", "fr"];
+export const locales: Locale[] = ["en", "es", "fr", "no"];
 
 export const hasLocale = (locale: string): locale is Locale =>
   locale in dictionaries;
