@@ -35,7 +35,7 @@ We have tests! Real ones! Run them with:
 npm test
 ```
 
-They're written with Vitest. Some of them pass. All of them were written with pure intentions and absolutely no copy-pasting from Stack Overflow.
+They're written with Vitest and all 32 of them pass (5 test files covering components and data). All of them were written with pure intentions and absolutely no copy-pasting from Stack Overflow.
 
 ## CI/CD
 
