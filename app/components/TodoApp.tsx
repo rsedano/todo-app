@@ -12,10 +12,20 @@ interface TodoAppProps {
   dict: Dictionary;
 }
 
+const PRIORITY_ORDER: Record<Todo["priority"], number> = { high: 0, medium: 1, low: 2 };
+
+function sortTodos(todos: Todo[]): Todo[] {
+  return [...todos].sort((a, b) => {
+    if (a.completed !== b.completed) return a.completed ? 1 : -1;
+    return PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority];
+  });
+}
+
 export default function TodoApp({ dict }: TodoAppProps) {
   const [todos, setTodos] = useState<Todo[]>(DEMO_TODOS);
   const [showForm, setShowForm] = useState(false);
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
+  const [showDone, setShowDone] = useState(false);
 
   function handleAdd(data: Omit<Todo, "id" | "createdAt">) {
     const newTodo: Todo = {
@@ -99,16 +109,28 @@ export default function TodoApp({ dict }: TodoAppProps) {
         {todos.length === 0 ? (
           <p className="text-center text-sm text-zinc-500 py-8">{dict.page.noTodos}</p>
         ) : (
-          todos.map((todo) => (
-            <TodoItem
-              key={todo.id}
-              todo={todo}
-              onToggle={handleToggle}
-              onDelete={handleDelete}
-              onEdit={setEditingTodo}
-              dict={itemDict}
-            />
-          ))
+          <>
+            <div className="flex justify-end">
+              <button
+                onClick={() => setShowDone((v) => !v)}
+                className="text-xs text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 underline"
+              >
+                {showDone ? dict.page.hideDone : dict.page.showDone}
+              </button>
+            </div>
+            {sortTodos(todos)
+              .filter((todo) => showDone || !todo.completed)
+              .map((todo) => (
+                <TodoItem
+                  key={todo.id}
+                  todo={todo}
+                  onToggle={handleToggle}
+                  onDelete={handleDelete}
+                  onEdit={setEditingTodo}
+                  dict={itemDict}
+                />
+              ))}
+          </>
         )}
       </div>
     </div>

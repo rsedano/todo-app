@@ -10,11 +10,21 @@ import CalendarView from "./components/CalendarView";
 
 type View = "list" | "calendar";
 
+const PRIORITY_ORDER: Record<Todo["priority"], number> = { high: 0, medium: 1, low: 2 };
+
+function sortTodos(todos: Todo[]): Todo[] {
+  return [...todos].sort((a, b) => {
+    if (a.completed !== b.completed) return a.completed ? 1 : -1;
+    return PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority];
+  });
+}
+
 export default function Home() {
   const [todos, setTodos] = useState<Todo[]>(DEMO_TODOS);
   const [view, setView] = useState<View>("list");
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Todo | null>(null);
+  const [showDone, setShowDone] = useState(false);
 
   function addTodo(data: Omit<Todo, "id" | "createdAt">) {
     const todo: Todo = {
@@ -105,18 +115,30 @@ export default function Home() {
             {todos.length === 0 ? (
               <p className="py-12 text-center text-gray-400">No tasks yet. Add one above!</p>
             ) : (
-              todos.map((todo) => (
-                <TodoItem
-                  key={todo.id}
-                  todo={todo}
-                  onToggle={toggleTodo}
-                  onDelete={deleteTodo}
-                  onEdit={(t) => {
-                    setEditing(t);
-                    setShowForm(false);
-                  }}
-                />
-              ))
+              <>
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => setShowDone((v) => !v)}
+                    className="text-xs text-gray-500 hover:text-gray-700 underline"
+                  >
+                    {showDone ? "Hide Done" : "Show Done"}
+                  </button>
+                </div>
+                {sortTodos(todos)
+                  .filter((todo) => showDone || !todo.completed)
+                  .map((todo) => (
+                    <TodoItem
+                      key={todo.id}
+                      todo={todo}
+                      onToggle={toggleTodo}
+                      onDelete={deleteTodo}
+                      onEdit={(t) => {
+                        setEditing(t);
+                        setShowForm(false);
+                      }}
+                    />
+                  ))}
+              </>
             )}
           </div>
         ) : (
