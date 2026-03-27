@@ -80,4 +80,52 @@ describe("TodoApp", () => {
       expect(highIdx).toBeLessThan(lowIdx);
     }
   });
+
+  it("adds a new todo when the form is submitted", async () => {
+    render(<TodoApp dict={dict} />);
+    await userEvent.click(screen.getByRole("button", { name: /\+ add todo/i }));
+    await userEvent.type(screen.getByPlaceholderText(/what needs to be done/i), "New test task");
+    await userEvent.click(screen.getByRole("button", { name: /^add todo$/i }));
+    expect(screen.getByText("New test task")).toBeInTheDocument();
+  });
+
+  it("cancels adding a todo and hides the form", async () => {
+    render(<TodoApp dict={dict} />);
+    await userEvent.click(screen.getByRole("button", { name: /\+ add todo/i }));
+    await userEvent.click(screen.getByRole("button", { name: /cancel/i }));
+    expect(screen.getByRole("button", { name: /\+ add todo/i })).toBeInTheDocument();
+  });
+
+  it("toggles a todo to completed state", async () => {
+    render(<TodoApp dict={dict} />);
+    const completeButtons = screen.getAllByRole("button", { name: /mark as complete/i });
+    await userEvent.click(completeButtons[0]);
+    // After toggling, it may disappear from default view; show done to verify
+    await userEvent.click(screen.getByRole("button", { name: /show done/i }));
+    expect(screen.getAllByRole("button", { name: /mark as incomplete/i }).length).toBeGreaterThan(0);
+  });
+
+  it("deletes a todo", async () => {
+    render(<TodoApp dict={dict} />);
+    const initialCount = screen.getAllByRole("button", { name: /mark as complete/i }).length;
+    await userEvent.click(screen.getAllByRole("button", { name: /delete/i })[0]);
+    const newCount = screen.getAllByRole("button", { name: /mark as complete/i }).length;
+    expect(newCount).toBe(initialCount - 1);
+  });
+
+  it("opens edit form when edit button is clicked", async () => {
+    render(<TodoApp dict={dict} />);
+    await userEvent.click(screen.getAllByRole("button", { name: /^edit$/i })[0]);
+    expect(screen.getByRole("button", { name: /save changes/i })).toBeInTheDocument();
+  });
+
+  it("saves edited todo title", async () => {
+    render(<TodoApp dict={dict} />);
+    await userEvent.click(screen.getAllByRole("button", { name: /^edit$/i })[0]);
+    const titleInput = screen.getByPlaceholderText(/what needs to be done/i);
+    await userEvent.clear(titleInput);
+    await userEvent.type(titleInput, "Edited task title");
+    await userEvent.click(screen.getByRole("button", { name: /save changes/i }));
+    expect(screen.getByText("Edited task title")).toBeInTheDocument();
+  });
 });
