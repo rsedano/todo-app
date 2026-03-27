@@ -5,7 +5,9 @@
   "page": {
     "heading": "My Todos",
     "addButton": "Add Todo",
-    "noTodos": "No todos yet. Add one above!"
+    "noTodos": "No todos yet. Add one above!",
+    "showDone": "Show Done",
+    "hideDone": "Hide Done"
   },
   "form": {
     "titlePlaceholder": "What needs to be done?",

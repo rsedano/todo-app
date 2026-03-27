@@ -5,7 +5,9 @@
   "page": {
     "heading": "Mes Tâches",
     "addButton": "Ajouter une tâche",
-    "noTodos": "Aucune tâche pour l'instant. Ajoutez-en une ci-dessus !"
+    "noTodos": "Aucune tâche pour l'instant. Ajoutez-en une ci-dessus !",
+    "showDone": "Afficher terminées",
+    "hideDone": "Masquer terminées"
   },
   "form": {
     "titlePlaceholder": "Qu'est-ce qui doit être fait ?",

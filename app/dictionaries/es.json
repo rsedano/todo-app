@@ -5,7 +5,9 @@
   "page": {
     "heading": "Mis Tareas",
     "addButton": "Agregar Tarea",
-    "noTodos": "Sin tareas aún. ¡Agrega una arriba!"
+    "noTodos": "Sin tareas aún. ¡Agrega una arriba!",
+    "showDone": "Mostrar completadas",
+    "hideDone": "Ocultar completadas"
   },
   "form": {
     "titlePlaceholder": "¿Qué hay que hacer?",
