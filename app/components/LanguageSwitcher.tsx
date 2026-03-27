@@ -8,6 +8,13 @@ interface LanguageSwitcherProps {
   labels: Record<Locale, string>;
 }
 
+const flags: Record<Locale, string> = {
+  en: "🇬🇧",
+  es: "🇪🇸",
+  fr: "🇫🇷",
+  no: "🇳🇴",
+};
+
 export default function LanguageSwitcher({ currentLang, labels }: LanguageSwitcherProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -20,7 +27,7 @@ export default function LanguageSwitcher({ currentLang, labels }: LanguageSwitch
 
   return (
     <div className="flex gap-1" role="navigation" aria-label="Language switcher">
-      {(["en", "es", "fr"] as Locale[]).map((locale) => (
+      {(["en", "es", "fr", "no"] as Locale[]).map((locale) => (
         <button
           key={locale}
           onClick={() => switchLocale(locale)}
@@ -32,7 +39,7 @@ export default function LanguageSwitcher({ currentLang, labels }: LanguageSwitch
               : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
           }`}
         >
-          {labels[locale]}
+          <span aria-hidden="true">{flags[locale]}</span> {labels[locale]}
         </button>
       ))}
     </div>

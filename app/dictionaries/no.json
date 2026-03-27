@@ -1,0 +1,37 @@
+{
+  "nav": {
+    "title": "Gjøremålsapp"
+  },
+  "page": {
+    "heading": "Mine gjøremål",
+    "addButton": "Legg til gjøremål",
+    "noTodos": "Ingen gjøremål ennå. Legg til ett ovenfor!",
+    "showDone": "Vis fullførte",
+    "hideDone": "Skjul fullførte"
+  },
+  "form": {
+    "titlePlaceholder": "Hva må gjøres?",
+    "descriptionPlaceholder": "Beskrivelse (valgfritt)",
+    "addButton": "Legg til gjøremål",
+    "saveButton": "Lagre endringer",
+    "cancelButton": "Avbryt"
+  },
+  "todo": {
+    "markComplete": "Merk som fullført",
+    "markIncomplete": "Merk som ufullført",
+    "edit": "Rediger",
+    "delete": "Slett",
+    "overdue": "Forfalt"
+  },
+  "stats": {
+    "active": "Aktive",
+    "done": "Fullførte",
+    "urgent": "Haster"
+  },
+  "lang": {
+    "en": "English",
+    "es": "Español",
+    "fr": "Français",
+    "no": "Norsk"
+  }
+}
