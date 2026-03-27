@@ -45,6 +45,35 @@ describe("TodoForm — add mode", () => {
   });
 });
 
+describe("TodoForm — field interactions", () => {
+  it("updates description field on input", async () => {
+    const onSubmit = vi.fn();
+    render(<TodoForm onSubmit={onSubmit} onCancel={vi.fn()} />);
+    await userEvent.type(screen.getByPlaceholderText(/description/i), "Some notes");
+    await userEvent.type(screen.getByPlaceholderText(/what needs to be done/i), "Task");
+    await userEvent.click(screen.getByRole("button", { name: /add todo/i }));
+    expect(onSubmit.mock.calls[0][0].description).toBe("Some notes");
+  });
+
+  it("submits selected priority", async () => {
+    const onSubmit = vi.fn();
+    render(<TodoForm onSubmit={onSubmit} onCancel={vi.fn()} />);
+    await userEvent.selectOptions(screen.getByDisplayValue("Medium"), "high");
+    await userEvent.type(screen.getByPlaceholderText(/what needs to be done/i), "Task");
+    await userEvent.click(screen.getByRole("button", { name: /add todo/i }));
+    expect(onSubmit.mock.calls[0][0].priority).toBe("high");
+  });
+
+  it("submits selected category", async () => {
+    const onSubmit = vi.fn();
+    render(<TodoForm onSubmit={onSubmit} onCancel={vi.fn()} />);
+    await userEvent.selectOptions(screen.getByDisplayValue("Personal"), "work");
+    await userEvent.type(screen.getByPlaceholderText(/what needs to be done/i), "Task");
+    await userEvent.click(screen.getByRole("button", { name: /add todo/i }));
+    expect(onSubmit.mock.calls[0][0].category).toBe("work");
+  });
+});
+
 describe("TodoForm — edit mode", () => {
   const existing: Todo = {
     id: "99",
