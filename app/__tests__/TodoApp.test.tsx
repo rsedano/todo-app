@@ -69,10 +69,6 @@ describe("TodoApp", () => {
 
   it("renders high-priority incomplete tasks before lower-priority ones", () => {
     render(<TodoApp dict={dict} />);
-    const titles = screen
-      .getAllByRole("button", { name: /mark as complete/i })
-      .map((btn) => btn.closest("li, div[class]")?.textContent ?? "");
-
     // Find positions of high vs low priority items by checking rendered priority badges
     const badges = screen.getAllByText(/^(high|medium|low)$/);
     const priorities = badges.map((el) => el.textContent as string);
